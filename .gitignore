@@ -1,0 +1,18 @@
+# Ignore virtual environment folder
+.venv/
+
+# Ignore dataset or large media files folder
+cifar-10-batches-py/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore IDE and editor settings
+.vscode/
+.idea/
+
+# Ignore log and temporary files
+*.log
+*.tmp
