@@ -5,9 +5,10 @@ import random
 
 # Define the ImageDataGenerator with augmentation techniques
 data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1./255,  # Normalize to [0,1]
+    rescale=1./255,  # Normalize pixel values to [0,1]
     rotation_range=40,
     width_shift_range=0.4,
+    zoom_range=0.6,
     height_shift_range=0.2,
     horizontal_flip=True,
 )
