@@ -52,6 +52,11 @@ model.summary()
 history = model.fit(x_train, y_train, epochs=10,
                     validation_data=(x_test, y_test), batch_size=64)
 
+# Save the training history
+import pickle
+with open('baseline_history.pkl', 'wb') as f:
+    pickle.dump(history.history, f)
+
 # Define CNN model
 model = keras.models.Sequential([
     keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
