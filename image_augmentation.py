@@ -3,45 +3,74 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Define the ImageDataGenerator with augmentation techniques
-data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1./255,  # Normalize pixel values to [0,1]
-    rotation_range=40,
-    width_shift_range=0.4,
-    zoom_range=0.6,
-    height_shift_range=0.2,
-    horizontal_flip=True,
-)
-
 # Load CIFAR-10 dataset
 (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.cifar10.load_data()
 
-# Select 5 random images for augmentation demonstration
+# Select 5 random images and normalize them
 random_indices = random.sample(range(len(train_images)), 5)
-sample_images = train_images[random_indices]
+sample_images = train_images[random_indices].astype('float32') / 255.0  # Normalize to [0,1]
 
-# Display original and augmented images
-def display_images():
-    plt.figure(figsize=(10, 10))
+# Define different augmentation techniques separately
+rotation_gen = tf.keras.preprocessing.image.ImageDataGenerator(rotation_range=40)
+width_shift_gen = tf.keras.preprocessing.image.ImageDataGenerator(width_shift_range=0.4)
+height_shift_gen = tf.keras.preprocessing.image.ImageDataGenerator(height_shift_range=0.2)
+zoom_gen = tf.keras.preprocessing.image.ImageDataGenerator(zoom_range=0.6)
+flip_gen = tf.keras.preprocessing.image.ImageDataGenerator(horizontal_flip=True)
+
+
+# Function to display images with specific augmentations
+def display_augmented_images():
+    plt.figure(figsize=(12, 15))
+
     for i, img in enumerate(sample_images):
         img = np.expand_dims(img, axis=0)  # Expand dims to match batch input format
-        aug_iter = data_gen.flow(img, batch_size=1)
-        augmented_image = next(aug_iter)[0]  # Get next augmented image
 
-        # Show original image
-        plt.subplot(5, 2, 2 * i + 1)
+        # Generate augmented images
+        rotated_img = next(rotation_gen.flow(img, batch_size=1))[0]
+        width_shifted_img = next(width_shift_gen.flow(img, batch_size=1))[0]
+        height_shifted_img = next(height_shift_gen.flow(img, batch_size=1))[0]
+        zoomed_img = next(zoom_gen.flow(img, batch_size=1))[0]
+        flipped_img = next(flip_gen.flow(img, batch_size=1))[0]
+
+        # Display original image
+        plt.subplot(6, 5, i + 1)
         plt.imshow(img[0])
         plt.title("Original")
         plt.axis("off")
 
-        # Show augmented image
-        plt.subplot(5, 2, 2 * i + 2)
-        plt.imshow(augmented_image)
-        plt.title("Augmented")
+        # Display rotated image
+        plt.subplot(6, 5, i + 6)
+        plt.imshow(rotated_img)
+        plt.title("Rotated")
+        plt.axis("off")
+
+        # Display width-shifted image
+        plt.subplot(6, 5, i + 11)
+        plt.imshow(width_shifted_img)
+        plt.title("Width Shifted")
+        plt.axis("off")
+
+        # Display height-shifted image
+        plt.subplot(6, 5, i + 16)
+        plt.imshow(height_shifted_img)
+        plt.title("Height Shifted")
+        plt.axis("off")
+
+        # Display zoomed image
+        plt.subplot(6, 5, i + 21)
+        plt.imshow(zoomed_img)
+        plt.title("Zoomed")
+        plt.axis("off")
+
+        # Display flipped image
+        plt.subplot(6, 5, i + 26)
+        plt.imshow(flipped_img)
+        plt.title("Flipped")
         plt.axis("off")
 
     plt.tight_layout()
     plt.show()
 
-# Display the images
-display_images()
+
+# Display images with specific augmentations
+display_augmented_images()
