@@ -76,11 +76,6 @@ CNN Model Training: Trains a simple CNN on both original and augmented datasets.
 Performance Evaluation: Compares accuracy and loss curves between models.
 Visualizations: Displays augmented images and training progress.
 
-
-## Results and Findings
-Training Accuracy Improved from 81% to 85%
-Validation Accuracy Increased from 72% to 75%
-
 ## Contributors
 Beverly Gaitu Karimi
 Lorna Ombati
