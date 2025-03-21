@@ -11,17 +11,17 @@ Has low resolution images for faster training of the model.
 
 ## Image Augmentation Techniques Used
 The following augmentation techniques are applied:
-●	Rotation: Rotates images up to 40 degrees
-●	Width Shift: Shifts the image horizontally by up to 20%
-●	Height Shift: Shifts the image vertically by up to 20%
-●	Zoom: Random zoom by up to 20%
-●	Horizontal Flip: Flips the image horizontally
+- Rotation: Rotates images up to 40 degrees
+- Width Shift: Shifts the image horizontally by up to 20%
+- Height Shift: Shifts the image vertically by up to 20%
+- Zoom: Random zoom by up to 20%
+- Horizontal Flip: Flips the image horizontally
 
 ## Technologies Used
-●	Python 3.7+
-●	TensorFlow
-●	NumPy
-●	Matplotlib# ImageAugmentation
+- Python 3.7+
+- TensorFlow
+- NumPy
+- Matplotlib# ImageAugmentation
 
 ## Training and Evaluation
 The model is trained using the Adam optimizer and sparse categorical cross-entropy loss. The training dataset is split into training and validation sets, with 80% of the data used for training and 20% used for validation. The model is trained for 10 epochs with a batch size of 64
@@ -51,35 +51,38 @@ The model is trained using the Adam optimizer and sparse categorical cross-entro
 
 ## Installation
 1. Clone the Git hub repository or download the zip file.
+```
 https://github.com/Rethes/ImageAugmentation.git
+```
 
 2. Install the dependencies
+```
 pip install -r requirements.txt
+```
 
 3. Run Augmentation
+```
 python image_augmentation.py
+```
 
-4. Train the Models
-Train without augmentation
+4. Train without augmentation
+```
 train_cnn.py
+```
 
-Train with augmentation
+5. Train with augmentation
+```
 cifar10_augmented_model.py
+```
 
-5. Evaluate Performance
+6. Evaluate Performance
+```
 python evaluate.py
-
+```
 
 ## Features
-Image Augmentations: Random horizontal flip, rotation, cropping, color jitter, and Gaussian blur.
-CNN Model Training: Trains a simple CNN on both original and augmented datasets.
-Performance Evaluation: Compares accuracy and loss curves between models.
-Visualizations: Displays augmented images and training progress.
-
-## Contributors
-Beverly Gaitu Karimi
-Lorna Ombati
-Ivasha Kitungulu
-Mary Langri
-Esther Mutua
+- Image Augmentations: Random horizontal flip, rotation, cropping, color jitter, and Gaussian blur.
+- CNN Model Training: Trains a simple CNN on both original and augmented datasets.
+- Performance Evaluation: Compares accuracy and loss curves between models.
+- Visualizations: Displays augmented images and training progress.
 
