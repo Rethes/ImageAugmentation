@@ -29,15 +29,6 @@ The model is trained using the Adam optimizer and sparse categorical cross-entro
 ## Project Structure
 📂 ImageAugmentationProject
 │-- 📂 .venv/                     # Virtual environment folder
-│   │-- 📂 Include/               # (Standard venv include directory)
-│   │-- 📂 Lib/
-│   │   │-- 📂 site-packages/     # Installed Python packages
-│   │-- 📂 Scripts/               # Virtual environment scripts
-│   │   │-- activate, deactivate  # Scripts to activate/deactivate venv
-│   │   │-- python.exe            # Python interpreter for this venv
-│   │   │-- pip.exe               # Package manager for this venv
-│   │-- pyvenv.cfg                # Virtual environment configuration file
-│
 │-- 📜 .gitignore                 # Git ignore file
 │-- 📜 README.md                  # Project documentation
 │-- 📜 requirements.txt           # Dependencies list
