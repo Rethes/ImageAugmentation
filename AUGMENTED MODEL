@@ -1,0 +1,136 @@
+import os
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# Suppress the warning by setting the environment variable
+os.environ['TF_DATA_DATASET_AUTOSHARD_POLICY'] = 'OFF'
+
+# Load CIFAR-10 dataset
+(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
+
+# Normalize images to [0,1] range
+x_train, x_test = x_train / 255.0, x_test / 255.0
+
+# Class names for CIFAR-10
+class_names = ["airplane", "automobile", "bird", "cat", "deer",
+               "dog", "frog", "horse", "ship", "truck"]
+
+# Show some example images
+plt.figure(figsize=(10, 5))
+for i in range(10):
+    plt.subplot(2, 5, i + 1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(x_train[i])
+    plt.xlabel(class_names[y_train[i][0]])
+plt.show()
+
+
+
+# Define CNN model
+model = keras.models.Sequential([
+    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
+    keras.layers.MaxPooling2D(2, 2),
+    keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D(2, 2),
+    keras.layers.Conv2D(128, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D(2, 2),
+    keras.layers.Flatten(),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(15, activation='softmax')  # 15 output classes
+])
+
+# Compile model
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)  # Define optimizer with custom learning rate
+model.compile(optimizer=optimizer,
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Show model summary
+model.summary()
+
+#AUGUMENTING
+data_gen = ImageDataGenerator(
+    rotation_range=40,
+    width_shift_range=0.4,
+    height_shift_range=0.2,
+    zoom_range=0.6,
+    horizontal_flip=True
+)
+
+# Augment training images
+train_generator = data_gen.flow(x_train, y_train, batch_size=255)
+
+#Visualize Augmented Images
+
+def display_augmented_images(data_gen, images):
+    fig, axes = plt.subplots(2, 5, figsize=(12, 5))
+
+    for i in range(5):  # Show 5 images
+        img = np.expand_dims(images[i], axis=0)  # Expand dims for generator
+        aug_iter = data_gen.flow(img, batch_size=1)
+        aug_img = next(aug_iter)[0]  # Get augmented image
+
+        # Show original
+        axes[0, i].imshow(images[i])
+        axes[0, i].set_title("Original")
+        axes[0, i].axis("off")
+
+        # Show augmented
+        axes[1, i].imshow(aug_img)
+        axes[1, i].set_title("Augmented")
+        axes[1, i].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+# Display augmentation effects
+display_augmented_images(data_gen, x_train[:5])
+
+#TRAINING
+history = model.fit(x_train, y_train, epochs=50,validation_data=(x_test, y_test), batch_size=255)
+
+#rescaling
+def rescale_image(image):
+    min_val = np.min(image)
+    max_val = np.max(image)
+    rescaled_image = (image - min_val) / (max_val - min_val)
+    return rescaled_image
+
+# Display the images
+def display_images():
+    plt.figure(figsize=(10, 10))
+    for i, img in enumerate(sample_images):
+        img = np.expand_dims(img, axis=0)
+        aug_iter = data_gen.flow(img, batch_size=1)
+        augmented_image = next(aug_iter)[0]
+
+        # Rescale augmented image
+        augmented_image = rescale_image(augmented_image)
+
+#SAVING
+model.save("cifar10_augmented_model.keras")
+
+#Plot Training Performance
+
+def plot_metrics(history):
+    # Plot accuracy
+    plt.plot(history.history['accuracy'], label='Training Accuracy')
+    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    plt.legend()
+    plt.title("Training vs Validation Accuracy")
+    plt.show()
+
+    # Plot loss
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.legend()
+    plt.title("Training vs Validation Loss")
+    plt.show()
+
+plot_metrics(history)
